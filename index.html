@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RebarSim — Visual Sim-to-Real Learning for Robotic Rebar Insertion</title>
+<meta name="description" content="An end-to-end visuomotor policy that inserts rebar of varying geometry at over 95% success, trained entirely in simulation with zero real-world data.">
+
+<!-- Social preview (update the URL once the site is live) -->
+<meta property="og:title" content="RebarSim — Visual Sim-to-Real Rebar Insertion">
+<meta property="og:description" content="One end-to-end visuomotor policy. Any rebar size. >95% real-world success. Zero real-world data.">
+<meta property="og:image" content="static/images/teaser.png">
+<meta property="og:type" content="website">
+
+<link rel="stylesheet" href="static/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏗️</text></svg>">
+</head>
+<body>
+
+<!-- ============================== NAV ============================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#top">RebarSim</a>
+    <div class="nav-links">
+      <a href="#background">Background</a>
+      <a href="#framework">Framework</a>
+      <a href="#sim">Simulation</a>
+      <a href="#videos">Real World</a>
+      <a href="#takeaways">Takeaways</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================== HERO ============================== -->
+<header class="hero" id="top">
+  <div class="container">
+
+    <h1 class="title">
+      Visual Sim-to-Real Learning for Robotic Insertion under Geometric Variations:
+      <span class="title-sub">Application to Rebar Installation</span>
+    </h1>
+
+    <!-- TODO(user): replace with the real author list after the double-blind review period. -->
+    <div class="authors tbd-inline">
+      <span class="tbd-tag">TBD</span>
+      Anonymous Authors
+    </div>
+    <div class="affiliations tbd-inline">
+      <span class="tbd-tag">TBD</span> Affiliations withheld for review
+    </div>
+    <!-- Link buttons. Anything without a URL yet renders as a disabled "soon" chip. -->
+    <div class="buttons">
+      <a class="btn btn-disabled" href="#" aria-disabled="true">📄 Paper <span class="soon">soon</span></a>
+      <a class="btn btn-disabled" href="#" aria-disabled="true">📚 arXiv <span class="soon">soon</span></a>
+      <a class="btn btn-disabled" href="#" aria-disabled="true">🎬 Video <span class="soon">soon</span></a>
+      <a class="btn btn-disabled" href="#" aria-disabled="true">💻 Code <span class="soon">soon</span></a>
+    </div>
+
+    <!-- ---------- the one-line claim ---------- -->
+    <p class="pitch">
+      One <em>end-to-end</em> visuomotor policy inserts rebar
+      <span class="hl">of varying geometry</span> at
+      <span class="hl">over 95&#8202;% success</span> on real hardware &mdash;
+      trained <span class="hl">only in simulation</span>.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num">&gt;95&#8202;%</div><div class="stat-lab">real-world success, <strong>across diverse rebar geometries</strong></div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-lab">real-world training samples</div></div>
+      <div class="stat"><div class="stat-num">1.3&#8202;mm</div><div class="stat-lab">slot clearance</div></div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ============================== BACKGROUND ============================== -->
+<section class="section alt" id="background">
+  <div class="container">
+    <h2>Background</h2>
+    <p class="lead narrow-p">
+      Every modern concrete structure depends on it. Construction workers lift heavy
+      steel bars, align them with the rack slots, and force them down &mdash; thousands
+      of times a day, at a steady cost in chronic injury. And no two bars are alike:
+      <strong>appearance</strong> varies with rust and mill finish,
+      <strong>nominal size</strong> with the design, and even one design drifts within
+      its <strong>production tolerances</strong> &mdash; bend angle, cut length,
+      out-of-plane twist, hook shape.
+    </p>
+
+    <div class="fig-row">
+      <figure class="fig">
+        <div class="media-slot" data-img="static/images/motivation.png"
+             data-label="Manual installation photo"></div>
+        <figcaption>Manual rebar installation on site.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="media-slot" data-img="static/images/Picture2.svg"
+             data-label="Rebar geometry family"></div>
+        <figcaption>Real bars as they arrive: their appearance and geometry vary widely.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CLAIM ============================== -->
+<section class="claim">
+  <div class="container narrow">
+    <div class="claim-k">Our claim</div>
+    <p>
+      Train an end-to-end visuomotor policy in simulation at scale &mdash; across
+      <strong>diverse variations</strong>, with the
+      <strong>right training recipe</strong> &mdash; and it grasps and inserts real
+      bars robustly. No real-world data, no perception stack.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== FRAMEWORK ============================== -->
+<section class="section" id="framework">
+  <div class="container">
+    <h2>Training Framework</h2>
+    <p class="lead narrow-p">
+      Three phases, one controller. A privileged <strong>teacher</strong> learns the
+      task with RL on procedurally generated geometry, a multi-view
+      <strong>visual student</strong> is distilled from it under heavy randomization,
+      and the student deploys <strong>zero-shot</strong> with frozen weights.
+    </p>
+
+    <figure class="fig wide">
+      <div class="media-slot" data-img="static/images/framework.png"
+           data-label="Framework figure"
+           data-hint="Replace with the final vector version (<code>framework.svg</code>) when it is ready."></div>
+      <figcaption><span class="draft-tag">draft</span> The RebarSim training and deployment pipeline.</figcaption>
+    </figure>
+
+    <div class="phases">
+      <div class="phase phase-1">
+        <div class="phase-k">Phase 1</div>
+        <h3>Privileged teacher &mdash; RL in simulation</h3>
+        <p>
+          State-based policy over privileged proprioception, object and contact state,
+          trained across procedurally generated rebar and rack geometries.
+        </p>
+      </div>
+      <div class="phase phase-2">
+        <div class="phase-k">Phase 2</div>
+        <h3>Visual student &mdash; distillation</h3>
+        <p>
+          Shared ResNet-18 encoder over calibrated views plus proprioception.
+          DAgger&nbsp;+&nbsp;BC (&beta;&nbsp;=&nbsp;0.5) under appearance and
+          system-identified dynamics randomization.
+        </p>
+      </div>
+      <div class="phase phase-3">
+        <div class="phase-k">Phase 3</div>
+        <h3>Zero-shot deployment</h3>
+        <p>
+          Frozen weights, same controller, same cameras. No segmentation model, no
+          pose estimator, no fine-tuning.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SIMULATION ============================== -->
+<section class="section alt" id="sim">
+  <div class="container">
+    <h2>In Simulation</h2>
+    <p class="lead narrow-p">The student policy inside the simulator it was trained in.</p>
+
+    <div class="demo-row row-sim">
+      <div class="row-head">
+        <div class="row-title">
+          <h3>Simulated rollouts</h3>
+          <p>Procedurally generated bars and racks, randomized appearance and initial states.</p>
+        </div>
+        <div class="row-nav">
+          <button class="arrow" type="button" data-dir="-1" aria-label="Previous clip">&#8249;</button>
+          <button class="arrow" type="button" data-dir="1" aria-label="Next clip">&#8250;</button>
+        </div>
+      </div>
+      <div class="strip-wrap">
+        <div class="strip">
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/sim/env2_ep1.mp4" data-label="Sim 1"></div>
+            <figcaption>Sim rollout 1</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/sim/env9_ep1.mp4" data-label="Sim 2"></div>
+            <figcaption>Sim rollout 2</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/sim/env2_ep3.mp4" data-label="Sim 3"></div>
+            <figcaption>Sim rollout 3</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/sim/env2_ep2.mp4" data-label="Sim 4"></div>
+            <figcaption>Sim rollout 4</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VIDEOS ============================== -->
+<section class="section" id="videos">
+  <div class="container">
+    <h2>Real-World Demos</h2>
+    <p class="lead narrow-p">The same frozen policy, straight out of simulation, played at 1&times;.</p>
+
+    <div class="demo-row row-rollouts">
+      <div class="row-head">
+        <div class="row-title">
+          <h3>Different initial states, different bars</h3>
+          <p>Real-robot rollouts of the same frozen policy &mdash; a new arm pose and a new bar each time.</p>
+        </div>
+        <div class="row-nav">
+          <button class="arrow" type="button" data-dir="-1" aria-label="Previous clip">&#8249;</button>
+          <button class="arrow" type="button" data-dir="1" aria-label="Next clip">&#8250;</button>
+        </div>
+      </div>
+      <div class="strip-wrap">
+        <div class="strip">
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/rollout_01.mp4" data-label="Rollout 1"></div>
+            <figcaption>Rollout 1</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/rollout_02.mp4" data-label="Rollout 2"></div>
+            <figcaption>Rollout 2</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/rollout_03.mp4" data-label="Rollout 3"></div>
+            <figcaption>Rollout 3</figcaption>
+          </figure>
+          <figure class="clip">
+            <div class="media-slot video" data-video="static/videos/rollout_04.mp4" data-label="Rollout 4"></div>
+            <figcaption>Rollout 4</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-row row-long">
+      <div class="row-head">
+        <div class="row-title">
+          <h3>Continuous operation</h3>
+          <p>A single uncut 20-minute take: grasp, insert, retract, bar after bar.</p>
+        </div>
+        <span class="soon">soon</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================== TAKEAWAYS ============================== -->
+<section class="section alt" id="takeaways">
+  <div class="container">
+    <h2>Takeaways</h2>
+    <p class="lead narrow-p">
+      What the experiments actually showed. <span class="soon">soon</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============================== BIBTEX ============================== -->
+<section class="section" id="bibtex">
+  <div class="container narrow">
+    <h2>BibTeX</h2>
+    <p class="lead narrow-p">
+      Citation once the paper is out. <span class="soon">soon</span>
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container narrow">
+    <p class="small">
+      Figures marked <span class="draft-tag">draft</span> are provisional.
+      Released under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
