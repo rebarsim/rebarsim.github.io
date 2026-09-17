@@ -1,0 +1,551 @@
+/* ============================================================
+   RebarSim project page -- overrides on top of Bulma.
+
+   Follows the NeRFies / UMI-on-Legs project-page convention: Bulma does
+   the layout and typography, this file only sets the fonts, the hero
+   treatment, and the handful of page-specific components (stat row,
+   phase cards, clip grid, and the amber "media missing" slots).
+   ============================================================ */
+
+/* ------------------------------ type ------------------------------ */
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.publication-title,
+.title,
+.subtitle {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* Four link buttons do not fit one phone-width row, and they are the mobile
+   hero's only route to the paper -- so wrap them rather than let them run off
+   the edge. */
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.link-block a,
+.link-block button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.footer .icon-link {
+  font-size: 25px;
+  color: #000;
+}
+
+/* ------------------------------ hero ------------------------------ */
+
+/* Bulma places .hero-video behind the content; the scrim goes between them.
+   The source footage is domain-randomised sim -- bright, high-contrast and
+   busy -- so it needs a heavier veil than the 40 % flat black a project page
+   normally uses, plus a top-and-bottom gradient to seat the navbar and the
+   section tabs. */
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image:
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, .72) 0%,
+      rgba(0, 0, 0, .48) 28%,
+      rgba(0, 0, 0, .48) 72%,
+      rgba(0, 0, 0, .72) 100%);
+  background-color: rgba(0, 0, 0, .20);
+  z-index: 1;
+  transition: opacity 1s;
+}
+
+.hero-body,
+.hero-head,
+.hero-foot {
+  z-index: 2;
+  transition: opacity 1s;
+}
+
+/* Text sits on video, so it carries its own shadow rather than relying on
+   the scrim alone. */
+.hero.video .hero-body {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .55);
+}
+
+/* The wordmark. clamp() keeps the project-page scale on a wide screen while
+   still fitting a laptop, which a fixed 12rem does not.
+   These four selectors are qualified with .hero on purpose -- Bulma's
+   .title.is-1 and .subtitle.is-1 are two-class selectors and would
+   otherwise override a bare .hero-name. */
+.hero .hero-name {
+  font-size: clamp(3.5rem, 13vw, 11rem);
+  line-height: 1.02;
+  letter-spacing: -.02em;
+  margin-bottom: 1.25rem !important;
+}
+
+.hero .hero-tagline {
+  font-size: clamp(1.15rem, 2.8vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.3;
+  /* 46ch is wider than a phone, so cap it against the container too --
+     a bare ch measure overflows the viewport at the clamp's lower bound. */
+  max-width: min(46ch, 100%);
+  margin: 0 auto 1.5rem auto !important;
+}
+
+.hero .hero-venue {
+  display: block;
+  font-size: clamp(.95rem, 1.4vw, 1.35rem);
+  opacity: .85;
+  margin-bottom: .75rem;
+}
+
+.hero .hero-authors {
+  font-size: clamp(.85rem, 1.1vw, 1.05rem);
+  opacity: .9;
+  margin-bottom: .35rem;
+}
+
+/* A disabled navbar item should read as "not a link yet" without going so
+   faint it disappears against the video. */
+.hero-head .navbar-item.is-soon {
+  opacity: .72;
+  cursor: default;
+}
+
+.hero-head .navbar-item .soon,
+.hero-head .button .soon {
+  margin-left: 7px;
+}
+
+/* Bulma's .button is a flex row that sets its own child spacing, so the chip
+   needs its line-height reset or it stretches the button. */
+.hero-head .button .soon {
+  line-height: 1.2;
+  align-self: center;
+}
+
+.hero-head .button[disabled] {
+  opacity: .8;
+}
+
+/* The github/pdf/arxiv marks are flat SVGs; invert them onto the dark hero. */
+.hero-head .navbar-item img,
+.hero .button img {
+  height: 1.15em;
+  width: auto;
+}
+
+.hero-head .button[disabled] img {
+  filter: none;
+}
+
+/* ------------------------------ pitch + stats ------------------------------ */
+
+/* The one-sentence pitch. Capped so it lands on two lines at the container's
+   width -- a notch larger took three, and the section was then mostly air. */
+#overview .subtitle {
+  font-size: clamp(1.1rem, 1.9vw, 1.4rem);
+  line-height: 1.5;
+}
+
+/* The three claim numbers. Kept as a plain Bulma column row -- no card
+   chrome -- so the figures themselves carry the emphasis. */
+
+.stats .stat-num {
+  font-family: 'Google Sans', sans-serif;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+
+.stats .stat-lab {
+  color: #6b7280;
+  font-size: .875rem;
+  line-height: 1.4;
+  margin-top: .3rem;
+}
+
+.stats .column+.column {
+  border-left: 1px solid #ebeef1;
+}
+
+@media screen and (max-width: 768px) {
+  .stats .column+.column {
+    border-left: 0;
+    border-top: 1px solid #ebeef1;
+    padding-top: 1.25rem;
+  }
+}
+
+/* Phrase-level highlight in the pitch line. A full soft wash rather than a
+   part-height gradient -- at this size a gradient stopping mid-glyph reads as
+   a strikethrough across the descenders. */
+.hl {
+  background: rgba(50, 115, 220, .13);
+  border-radius: .18em;
+  box-shadow: 0 0 0 .14em rgba(50, 115, 220, .13);
+  font-weight: 600;
+}
+
+/* Bulma paints .content strong a dark #363636, which on the black claim band comes
+   out darker than the body text around it -- the phrases meant to stand out were the
+   least readable text on the page, at about 1.7:1 against black. Emphasis here is
+   weight plus a thin rule instead of any colour: a wash or a tinted word on a dark
+   ground reads as highlighter pen. */
+#claim .content strong {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, .45);
+  text-decoration-thickness: 2px;
+  text-underline-offset: .22em;
+}
+
+/* ------------------------------ figures ------------------------------ */
+
+.fig {
+  margin: 0;
+}
+
+.fig img,
+.fig video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.fig figcaption,
+.clip figcaption,
+.model figcaption {
+  color: #6b7280;
+  font-size: .9rem;
+  line-height: 1.5;
+  margin-top: .6rem;
+  text-align: center;
+}
+
+.fig.wide {
+  margin-top: 1rem;
+}
+
+/* Two figures of very different aspect ratio sit side by side. Giving both
+   the same box and letting the image letterbox inside it keeps the two
+   captions on one line -- sizing by max-height instead leaves the shorter
+   figure's caption riding up. */
+.fig-row .fig img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+/* ------------------------------ clip grid ------------------------------ */
+
+/* Clips come in mixed aspect ratios, so each is boxed at 16:9 and
+   letterboxed on black -- the grid rows then line up exactly. */
+.clip .media-slot.video {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.clip .media-slot.video video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+}
+
+/* The long take and the robustness clips carry a side panel of policy inputs, so
+   they are 1604x720 (2.23:1) rather than 16:9 -- box them at their own ratio and
+   give them the full container width so the burnt-in labels stay readable. */
+.clip.ultrawide .media-slot.video {
+  aspect-ratio: 1604 / 720;
+}
+
+.clip-note {
+  color: #6b7280;
+}
+
+/* ------------------------------ sim showcase ------------------------------ */
+
+/* The In Simulation showcase, after the sim video on umi-on-legs.github.io: it runs
+   the full width of the window, straight under the section's black band. Boxed at
+   its own 16:9 so the page below does not jump when it loads, and black so the band
+   carries on down until it does. */
+.sim-showcase .media-slot.video {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  background: #000;
+}
+
+.sim-showcase .media-slot.video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* .clip-note's grey is set for a white page; on the band it falls to about 4.3:1. */
+#sim .clip-note {
+  color: rgba(255, 255, 255, .62);
+}
+
+/* ------------------------------ phase cards ------------------------------ */
+
+.phase {
+  height: 100%;
+  padding: 1.4rem 1.5rem;
+  border: 1px solid #ebeef1;
+  border-top: 3px solid #dbdee2;
+  border-radius: 8px;
+  background: #fafbfc;
+}
+
+.phase .title {
+  margin-bottom: .6rem;
+}
+
+.phase-k {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #8a929c;
+  margin-bottom: .35rem;
+}
+
+.phase-1 {
+  border-top-color: #3273dc;
+}
+
+.phase-2 {
+  border-top-color: #6f57c9;
+}
+
+.phase-3 {
+  border-top-color: #0f8b80;
+}
+
+/* ------------------------------ status chips ------------------------------ */
+
+.soon {
+  display: inline-block;
+  vertical-align: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  background: #fff8e8;
+  color: #b4700a;
+  border: 1px solid #e6c079;
+  border-radius: 5px;
+  padding: 1px 6px;
+}
+
+
+.draft-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  background: #eef1f4;
+  color: #79838f;
+  border: 1px solid #e2e7ec;
+  border-radius: 5px;
+  padding: 1px 6px;
+  margin-right: 6px;
+}
+
+/* ------------------------------ media slots ------------------------------ */
+
+/* Every image and video on the page is declared as a path and filled in only
+   if the file loads. A slot that finds nothing renders the amber box below,
+   naming the exact path to drop the file at -- so adding content is a file
+   copy, not an HTML edit. */
+.media-slot {
+  min-height: 190px;
+}
+
+.slot-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  padding: 26px 20px;
+  border: 2px dashed #e6c079;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(45deg, rgba(230, 192, 121, .10) 0 10px, transparent 10px 20px),
+    #fff8e8;
+  color: #b4700a;
+  text-shadow: none;
+}
+
+.slot-icon {
+  font-size: 26px;
+  line-height: 1;
+  opacity: .8;
+}
+
+.slot-title {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.slot-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  color: #8a5b12;
+  background: rgba(255, 255, 255, .7);
+  border: 1px solid #e6c079;
+  border-radius: 5px;
+  padding: 2px 8px;
+  word-break: break-all;
+}
+
+.slot-hint {
+  font-size: 13px;
+  color: #8a5b12;
+  max-width: 34ch;
+  line-height: 1.45;
+}
+
+.slot-hint code {
+  font-size: 12px;
+  background: rgba(255, 255, 255, .7);
+  padding: 1px 4px;
+  border-radius: 4px;
+  color: #8a5b12;
+}
+
+/* A letterboxed clip slot is black, so its placeholder must not be. */
+.clip .media-slot.video:not(.filled) {
+  background: transparent;
+}
+
+/* ------------------------------ tab groups ------------------------------ */
+
+/* A row of pills over one visible panel. Only the open panel is in the layout, so
+   a clip in a closed tab is never laid out and (with data-defer) never fetched. */
+.eval-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin-bottom: 1.6rem;
+}
+
+.eval-tab {
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  color: #4b5563;
+  background: #fff;
+  border: 1px solid #dbdee2;
+  border-radius: 999px;
+  padding: .45rem 1.05rem;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.eval-tab:hover {
+  border-color: #b9bec5;
+  color: #1f2937;
+}
+
+.eval-tab.is-active {
+  background: #1f2937;
+  border-color: #1f2937;
+  color: #fff;
+}
+
+.eval-tab .soon {
+  margin-left: .45rem;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.is-active {
+  display: block;
+}
+
+/* The one line of plain words that says what a tab is showing. */
+.tab-line {
+  max-width: 46rem;
+  margin: 0 auto 1.1rem;
+  text-align: center;
+  color: #4b5563;
+}
+
+@media screen and (max-width: 768px) {
+  .eval-tab {
+    font-size: .85rem;
+    padding: .4rem .8rem;
+  }
+}
+
+/* ------------------------------ rebar models ------------------------------ */
+
+/* Six live canvases, so the box is squared off and the viewer inside is only built
+   and only rendered while it is on screen (static/js/models.js). */
+.model-slot {
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  border: 1px solid #ebeef1;
+  border-radius: 8px;
+  background: #fafbfc;
+  overflow: hidden;
+}
+
+.model-slot.filled {
+  cursor: grab;
+}
+
+.model-slot.filled:active {
+  cursor: grabbing;
+}
+
+.model-slot canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;      /* let a phone scroll past the grid without fighting the orbit */
+}
+
+/* ------------------------------ misc ------------------------------ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* The hero tabs jump to sections; keep headings clear of a sticky-feeling top. */
+section[id],
+#bars {
+  scroll-margin-top: 1rem;
+}
