@@ -75,6 +75,14 @@ body {
   transition: opacity 1s;
 }
 
+/* Six section tabs at is-size-5 overflow the bar on a tablet (769-1023 px) and push
+   "Demos" off the left edge; step the type down there so all six fit. */
+@media screen and (min-width: 769px) and (max-width: 1023px) {
+  .hero-foot .tabs.is-size-5 {
+    font-size: 1rem !important;
+  }
+}
+
 /* Text sits on video, so it carries its own shadow rather than relying on
    the scrim alone. */
 .hero.video .hero-body {
