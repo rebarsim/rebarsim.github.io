@@ -57,7 +57,6 @@
 
     if (isVideo) {
       var v = document.createElement("video");
-      v.src = src;
       v.muted = true;
       v.playsInline = true;
       v.loop = !slot.hasAttribute("data-once");   // long take: play once
@@ -65,7 +64,16 @@
          or not, so a progress bar is not what tells them apart. */
       v.controls = slot.hasAttribute("data-once") || slot.hasAttribute("data-controls");
       v.preload = "metadata";
-      v.addEventListener("loadeddata", function () { swap(slot, v); observe(v); }, { once: true });
+      /* Safari decodes no frame until play(), so a clip that waits for the reader
+         sits black; the #t fragment makes it decode one. The loops start themselves. */
+      v.src = v.loop ? src : src + "#t=0.001";
+      /* Into the page at once, and marked filled on loadedmetadata rather than
+         loadeddata: Safari suspends a video that is not in the document, and does
+         not decode a frame before play(), so loadeddata never came there and the
+         slot stayed empty. Every browser fires loadedmetadata under preload=metadata. */
+      slot.innerHTML = "";
+      slot.appendChild(v);
+      v.addEventListener("loadedmetadata", function () { mark(slot); observe(v); }, { once: true });
       v.addEventListener("error", function () { tryNext(slot, list, i + 1, isVideo); }, { once: true });
     } else {
       var probe = new Image();
@@ -80,8 +88,12 @@
 
   function swap(slot, el) {
     slot.innerHTML = "";
-    slot.style.minHeight = "0";
     slot.appendChild(el);
+    mark(slot);
+  }
+
+  function mark(slot) {
+    slot.style.minHeight = "0";
     slot.classList.add("filled");
   }
 
